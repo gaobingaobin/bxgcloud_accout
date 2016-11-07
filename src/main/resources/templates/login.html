@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"/>
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+	<title>B-X-G</title>
+   <link rel="stylesheet" type="text/css" href="css/login.css">
+</head>
+<body>
+
+<div class="login">
+ <h1 align="center" class="h">记账系统</h1>
+    <div class="errorMsg" id="error"><font th:text="${loginMassage}"></font></div>
+    <form id="loginFrom" action="/login" method="post">
+	<div class="inputCls">
+		<input class="loginInput" type="text" name="username"  id="username" placeholder="请输入用户名"/>
+	</div>
+	<div class="inputCls">
+		<input class="psdInput" type="password" name="password" id="password" onkeydown="enterLogin()" placeholder="请输入密码"/>
+	</div>
+	<div align="center">
+		<input type="button" name="loginBut" class="loginBut" value="登录" onclick="doLogin()">
+	</div>
+	</form>
+</div>
+<div class="comName">
+	<label>@B-X-G信息技术股份有限公司</label>
+</div>
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+</html>

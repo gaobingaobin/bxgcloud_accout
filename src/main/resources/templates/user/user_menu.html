@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style type="text/css">
+    .label_left {
+        width: 80px;
+        text-align: right;
+        font-size: 13pt;
+        font-weight: 300;
+    }
+
+    .span_style {
+        margin-left: 5px;
+        margin-top: 5px;
+    }
+
+    td {
+        height: 30px;
+    }
+</style>
+<div class="tabbable">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+            <a data-toggle="tab" href="#record">
+                <i class="green ace-icon glyphicon glyphicon-repeat bigger-120"></i>
+                员工管理
+                <span class="badge badge-danger"></span>
+            </a>
+        </li>
+        <button class="btn btn-xs btn-danger" style="float:right;margin-right: 60px;font-size: 15px;" id="userBtn">
+            <i class="ace-icon glyphicon glyphicon-euro"></i>
+            添加用户
+        </button>
+    </ul>
+
+    <div class="tab-content">
+        <div id="contentDiv" class="tab-pane in active"></div>
+    </div>
+</div>
+<div id="userAddModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog" style="width:430px;">
+        <div class="modal-content">
+            <div class="modal-header no-padding">
+                <div class="table-header" style="cursor: move;">
+                    <button type="button" class="close" id="spare_apply_irder_close_button" data-dismiss="modal"
+                            aria-hidden="true">
+                        <span>&times;</span>
+                    </button>
+                    添加用户
+                </div>
+            </div>
+            <div class="modal-body" id="user_add"></div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript">
+    var showObj = "#contentDiv";
+    $.ajax({
+        type: "GET",
+        url: "user/record",//jqgrid_erp.html
+        error: function (data) {
+            alert("There was a problem");
+        },
+        success: function (data) {
+            $(showObj).html(data);
+        }
+    });
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+    //根据不同的tab进行相应的ajax页面加载
+    $(function () {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href"); //获取点击的当前tab的id,例如#home
+            var pageName = target.substr(1);
+            window.location.hash = "#page1/user_menu?tab=" + pageName;
+            $.ajax({
+                type: "GET",
+                url: "user/" + pageName + ".html",//jqgrid_erp.html
+                error: function (data) {
+                    alert("There was a problem");
+                },
+                success: function (data) {
+                    $(showObj).html(data);
+                }
+            });
+            //将其余的tab中的jqgrid销毁
+            $("#grid-table").jqGrid('GridDestroy');
+        })
+    });
+    $(window).bind('hashchange', function () {
+        var hash = window.location.hash.replace("page1/user_menu?tab=", "#");
+        $('#myTab a[href="' + hash + '"]').tab('show');
+    });
+    $("#userBtn").click(function () {
+        $.ajax({
+            type: "GET",
+            url: "user/toAddUserInfo",
+            error: function (data) {
+                alert("There was a problem");
+            },
+            success: function (data) {
+                $("#user_add").html(data);
+            }
+        });
+        $("#userAddModal").modal({
+            "backdrop": 'static',
+            "keyboard": true,
+            "show": true
+        });
+    });
+</script>

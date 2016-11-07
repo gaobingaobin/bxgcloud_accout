@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>和美信息 - 主页</title>
+
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!--/* bootstrap & fontawesome */-->
+    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}" href="css/bootstrap.min.css"/>
+
+    <link rel="stylesheet" th:href="@{css/font-awesome.min.css}" href="css/font-awesome.min.css"/>
+
+    <!--/* page specific plugin styles */-->
+
+    <link rel="stylesheet" th:href="@{css/jquery-ui.min.css}" href="css/jquery-ui.min.css"/>
+
+    <link rel="stylesheet" th:href="@{css/datepicker.css}" href="css/datepicker.css"/>
+    <link rel="stylesheet" th:href="@{css/ui.jqgrid.css}" href="css/ui.jqgrid.css"/>
+    <!--/* text fonts */-->
+    <link rel="stylesheet" th:href="@{css/ace-fonts.css}" href="css/ace-fonts.css"/>
+
+    <!--/* ace styles */-->
+    <link rel="stylesheet" th:href="@{css/chosen.css}" href="css/chosen.css"/>
+    <link rel="stylesheet" th:href="@{css/ace.min.css}" href="css/ace.min.css"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" th:href="@{css/ace-part2.min.css}" href="css/ace-part2.min.css"/>
+    <![endif]-->
+    <!--/*<link rel="stylesheet" href="/css/ace-skins.min.css" />*/-->
+    <!--/*<link rel="stylesheet" href="/css/ace-rtl.min.css" />*/-->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" th:href="@{/css/ace-ie.min.css}" href="/css/ace-ie.min.css"/>
+    <![endif]-->
+
+    <!--/**/-->
+    <link rel="stylesheet" href="/css/my-modal-modify.css"/>
+    <!--引用zTree的样式-->
+    <link rel="stylesheet" th:href="@{/css/ztree/zTreeStyle.css}" href="/css/ztree/zTreeStyle.css"
+          type="text/css">
+    <!--引用dropzone的样式 文件上传界面-->
+    <link rel="stylesheet" th:href="@{/css/dropzone.css}" href="/css/dropzone.css" type="text/css">
+
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='js/jquery.min.js'>" + "<" + "/script>");
+    </script>
+
+    <!--zTree的核心代码-->
+    <script th:src="@{/css/ztree/jquery.ztree.core-3.5.js}"
+            src="/css/ztree/jquery.ztree.core-3.5.js"></script>
+
+    <!--/* inline styles related to this page */-->
+
+    <!--/* ace settings handler */-->
+    <script th:src="@{/js/ace-extra.min.js}" src="/js/ace-extra.min.js"></script>
+
+    <!--/* HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries */-->
+
+    <!--[if lte IE 8]>
+    <script th:src="@{js/html5shiv.js}" src="js/html5shiv.js"></script>
+    <script th:src="@{js/respond.min.js}" src="js/respond.min.js"></script>
+
+    <![endif]-->
+</head>
+
+<body class="no-skin">
+<!--/* #section:basics/navbar.layout */-->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <!--/* #section:basics/sidebar.mobile.toggle*/-->
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
+            <span class="sr-only">Toggle sidebar</span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
+
+        <!--/* /section:basics/sidebar.mobile.toggle */-->
+        <div class="navbar-header pull-left">
+            <!--/* #section:basics/navbar.layout.brand */-->
+            <a href="#" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf"></i>
+                    深圳市和美信息技术有限公司
+                </small>
+            </a>
+
+
+            <!--/* /section:basics/navbar.layout.brand */-->
+
+            <!--/* #section:basics/navbar.toggle */-->
+
+            <!--/* /section:basics/navbar.toggle */-->
+        </div>
+
+        <!--/* #section:basics/navbar.dropdown */-->
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+
+
+                <li class="purple">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="">
+                        <i class="ace-icon fa fa-bell icon-animated-bell"></i>
+                        <span class="badge badge-important"  id="messageSize"></span>
+                    </a>
+
+                    <ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close"
+                        id="messageList">
+                        <li class="dropdown-header">
+                            <i class="ace-icon fa fa-exclamation-triangle"></i>
+                            <span ></span>个消息
+                        </li>
+                        <!--  <li th:each="li:${messages}" th:text="${li.name}">
+                              &lt;!&ndash;<span th:text="${messages}"></span>&ndash;&gt;
+                          </li>-->
+                        <li>
+                            <a>
+                                <!--href="javascript:shortcutEnter('borrow_spare_parts_audit','page/borrow_spare_parts')"-->
+                                <div class="clearfix">
+                                    <span class="pull-left">
+                                        <i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>
+                                        <span th:text="任务受理"></span>
+                                    </span>
+                                    <span class="pull-right badge badge-info" >2</span>
+                                </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+                <!--/* #section:basics/navbar.user_menu */-->
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="avatars/avatar4.png" alt="张三照片"/>
+								<span class="user-info" >
+									张三
+								</span>
+
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <!--<li>-->
+                        <!--<a href="">-->
+                        <!--<i class="ace-icon fa fa-cog"></i>-->
+                        <!--设置-->
+                        <!--</a>-->
+                        <!--</li>-->
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="logout">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                注销
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--/* /section:basics/navbar.user_menu */-->
+            </ul>
+        </div>
+
+        <!--/* /section:basics/navbar.dropdown */-->
+    </div>
+    <!--/* /.navbar-container */-->
+</div>
+
+<!--/* /section:basics/navbar.layout */-->
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <!--/* #section:basics/sidebar */-->
+    <div id="sidebar" class="sidebar  responsive sidebar-fixed">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('sidebar', 'fixed')
+            } catch (e) {
+            }
+        </script>
+
+
+        <ul class="nav nav-list" id="menuUL">
+            <li th:each="menu,menuStat:${menus}" class="">
+                <a href="#" class="dropdown-toggle" th:if="${menu.url==null}">
+                    <i th:class="'menu-icon fa '+ ${menu.iconLabel}"></i>
+                    <span class="menu-text" th:text="${menu.name}"> 菜单 </span>
+                    <b th:if="${menu.childrenMenus.size() gt 0}" class="arrow fa fa-angle-down"></b>
+                </a>
+                <a th:href="'main.html#' + ${menu.url}" th:attr="data-url=${menu.url}" th:if="${menu.url!=null}">
+                    <i th:class="'menu-icon fa '+ ${menu.iconLabel}"></i>
+                    <span class="menu-text" th:text="${menu.name}"> 菜单 </span>
+                    <b th:if="${menu.childrenMenus.size() gt 0}" class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu" th:if="${menu.childrenMenus.size() gt 0}">
+                    <li th:each="secMenu,userStat:${menu.childrenMenus}">
+                        <a th:href="'main.html#' + ${secMenu.url}" th:attr="data-url=${secMenu.url}">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            <span th:text="${secMenu.name}"></span>
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!--/*-->
+        <!--<ul class="nav nav-list">
+        <li ui-sref-active="active">
+            <a ui-sref="home">
+                <i class="menu-icon fa fa-home"></i>
+                <span class="menu-text"> 仓库 </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a href="" class="dropdown-toggle">
+                <i class="menu-icon fa fa-download"></i>
+                <span class="menu-text"> 入库管理 </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+                <li ui-sref-active="active">
+                    <a ui-sref="purchase_in">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        采购入库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="" ui-sref-active="active">&lt;!&ndash;ui-sref-active="active"&ndash;&gt;
+                    <a ui-sref="detach_entry">&lt;!&ndash;detach_entry&ndash;&gt;
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        拆机入库
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+
+                <li ui-sref-active="active">
+                    <a ui-sref="borrow_entry">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        借件入库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                &lt;!&ndash;<li ui-sref-active="active">&ndash;&gt;
+                &lt;!&ndash;<a ui-sref="repair_entry">&ndash;&gt;
+                &lt;!&ndash;<i class="menu-icon fa fa-caret-right"></i>&ndash;&gt;
+                &lt;!&ndash;保修内维修入库&ndash;&gt;
+                &lt;!&ndash;</a>&ndash;&gt;
+
+                &lt;!&ndash;<b class="arrow"></b>&ndash;&gt;
+                &lt;!&ndash;</li>&ndash;&gt;
+
+                <li ui-sref-active="active">
+                    <a ui-sref="return_entry">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        借出件返还入库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="" class="dropdown-toggle">
+                <i class="menu-icon fa fa-upload"></i>
+                <span class="menu-text"> 出库管理 </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li ui-sref-active="active">
+                    <a ui-sref="sale_out">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        销售出库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li ui-sref-active="active">
+                    <a ui-sref="discard_out">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        报废出库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li ui-sref-active="active">
+                    <a ui-sref="return_out">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        借入件返还
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li ui-sref-active="active">
+                    <a ui-sref="lend_out">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        贷出件出库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                &lt;!&ndash;<li class="">&ndash;&gt;
+                &lt;!&ndash;<a href="mobile-menu-3.html">&ndash;&gt;
+                &lt;!&ndash;<i class="menu-icon fa fa-caret-right"></i>&ndash;&gt;
+                &lt;!&ndash;委托维修&ndash;&gt;
+                &lt;!&ndash;</a>&ndash;&gt;
+
+                &lt;!&ndash;<b class="arrow"></b>&ndash;&gt;
+                &lt;!&ndash;</li>&ndash;&gt;
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="" class="dropdown-toggle">
+                &lt;!&ndash;<i class="menu-icon fa fa-database"></i>&ndash;&gt;
+                <i class="menu-icon fa fa-cog"></i>
+                <span class="menu-text"> 其它出入库 </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li ui-sref-active="active">
+                    <a ui-sref="quality_assurance_repair">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        保内维修
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="entrust_repair">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        委托维修
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        <li ui-sref-active="active">
+            <a href="" class="dropdown-toggle">
+            &lt;!&ndash;<a href="" ui-sref="engineer_borrow_return">&ndash;&gt;
+                &lt;!&ndash;<i class="menu-icon fa fa-database"></i>&ndash;&gt;
+                <i class="menu-icon fa fa-cloud"></i>
+                <span class="menu-text"> 领用归还</span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li ui-sref-active="active">
+                    <a ui-sref="borrow_spare_parts">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        备件领用
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+
+                <li ui-sref-active="active">
+                    <a ui-sref="return_spare_parts">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        备件归还
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+
+            &lt;!&ndash;<a ui-sref="engineer_borrow_return">&ndash;&gt;
+                &lt;!&ndash;<i class="menu-icon fa fa-cloud"></i>&ndash;&gt;
+                &lt;!&ndash;<span class="menu-text"> 领用归还 </span>&ndash;&gt;
+
+            &lt;!&ndash;</a>&ndash;&gt;
+
+            &lt;!&ndash;<b class="arrow"></b>&ndash;&gt;
+
+        </li>
+
+
+        <li ui-sref-active="active">
+            <a ui-sref="spare_parts_allocate">
+                <i class="menu-icon fa fa-exchange"></i>
+                <span class="menu-text"> 调拨管理 </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+
+        <li class="">
+            <a href="" class="dropdown-toggle">
+                <i class="menu-icon fa fa-database"></i>
+                <span class="menu-text"> 盘点管理 </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="">
+                    <a ui-sref="check">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        盘盈报表
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="">
+                    <a ui-sref="check_entry">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        盘盈入库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="">
+                    <a ui-sref="check_out">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        盘亏出库
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="" class="dropdown-toggle">
+                <i class="menu-icon fa fa-cube"></i>
+                <span class="menu-text"> 基础数据 </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+                <li>
+                    <a ui-sref="barcode_manage">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        条码管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="mobile-menu-2.html">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        备件编码
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="mobile-menu-2.html">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        部门管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="mobile-menu-2.html">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        员工管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+
+        </ul>-->
+        <!-- /.nav-list -->
+        <!--*/-->
+
+        <!--/* #section:basics/sidebar.layout.minimize */-->
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left"
+               data-icon2="ace-icon fa fa-angle-double-right"></i>
+        </div>
+
+        <!--/* /section:basics/sidebar.layout.minimize */-->
+        <script type="text/javascript">
+            try {
+                ace.settings.check('sidebar', 'collapsed')
+            } catch (e) {
+            }
+        </script>
+    </div>
+
+    <!--/* /section:basics/sidebar */-->
+    <div class="main-content">
+
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="page-content-area">
+
+                </div>
+                <!--/* /.col */-->
+            </div>
+            <!--/* /.row */-->
+        </div>
+        <!--/* /.page-content */-->
+    </div>
+    <!--/* /.main-content */-->
+
+
+    <a href="" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+<!--/* /.main-container */-->
+
+<!--/* basic scripts */-->
+
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='js/jquery1x.min.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+
+    if ('ontouchstart' in document.documentElement) document.write("<script src='js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+
+</script>
+<script th:src="@{js/bootstrap.min.js}" src="js/bootstrap.min.js"></script>
+<script th:src="@{js/jquery-ui.min.js}" src="js/jquery-ui.min.js"></script>
+<script th:src="@{js/chosen.jquery.min.js}" src="js/chosen.jquery.min.js"></script>
+<script th:src="@{js/date-time/bootstrap-datepicker.min.js}"
+        src="js/date-time/bootstrap-datepicker.min.js"></script>
+<script th:src="@{js/date-time/daterangepicker.min.js}"
+        src="js/date-time/daterangepicker.min.js"></script>
+
+<script th:src="@{js/jqGrid/jquery.jqGrid.min.js}" src="js/jqGrid/jquery.jqGrid.min.js"></script>
+<script th:src="@{js/date-time/locales/bootstrap-datepicker.zh-CN.js}"
+        src="js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+
+<script th:src="@{js/jqGrid/i18n/grid.locale-en.js}" src="js/jqGrid/i18n/grid.locale-en.js"></script>
+
+<!--/* page specific plugin scripts */-->
+
+<script th:src="@{js/ace-elements.min.js}" src="js/ace-elements.min.js"></script>
+<!--/* ace scripts --*/>
+<!--/*<script src="/js/ace.min.js"></script>*/-->
+<script th:src="@{js/uncompressed/ace.js}" src="js/uncompressed/ace.js"></script>
+
+<!--/* inline scripts related to this page */-->
+<!--/*<link rel="stylesheet" href="/css/ace.onpage-help.css" />*/-->
+<!--/*<link rel="stylesheet" href="/docs/js/themes/sunburst.css" />*/-->
+
+<!--/*script type="text/javascript"> ace.vars['base'] = '..'; </script*/-->
+<!--/*<script src="/js/ace/ace.onpage-help.js"></script>*/-->
+<!--/*<script src="/docs/js/rainbow.js"></script>*/-->
+<!--/*<script src="/docs/js/language/generic.js"></script>*/-->
+<!--/*<script src="/docs/js/language/html.js"></script>*/-->
+<!--/*<script src="/docs/js/language/css.js"></script>*/-->
+<!--/*<script src="/docs/js/language/javascript.js"></script>*/-->
+
+
+<!--/*<script src="/js/angular/angular-route.min.js"></script>*/-->
+
+
+<script th:src="@{js/jqGrid/jquery.jqGrid.min.js}" src="js/jqGrid/jquery.jqGrid.min.js"></script>
+<script th:src="@{js/jqGrid/i18n/grid.locale-cn.js}" src="js/jqGrid/i18n/grid.locale-cn.js"></script>
+<script th:src="@{js/jquery.form.js}" src="js/jquery.form.js"></script>
+<script th:src="@{js/notification.js}" src="js/notification.js"></script>
+
+<!--<script src="../../js/jquery.form.js"></script>-->
+
+<!--/*<script src="/js/date-time/locales/bootstrap-datepicker.zh-CN.js"/>*/-->
+<script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/1-6-10/esl.js"></script>
+<!--/*<script src="/js/webix/webix.js"></script>*/-->
+<!--/*<script src="/app/app.js"></script>*/-->
+<!--/*<script src="/js/router/router.js"></script>*/-->
+<!--/*<script src="testdata.js"></script>*/-->
+
+
+<input type="hidden" id="defaultMainPage" th:value="${defaultMainPage}"/>
+<script type="text/javascript">
+    var globalStr = "";
+    function shortcutEnter(tabURL, menuURL) {
+        globalStr = tabURL;
+        window.location = "/main.html#" + menuURL;
+        if ($("#" + globalStr).length > 0) {
+            $('a[href="#' + globalStr + '"]').click();
+        }
+        window.location.reload();
+    }
+
+    $("#menuUL a").click(function () {
+        globalStr = "";
+    })
+
+    jQuery(function ($) {
+        var urlhash = window.location.hash.replace(/^#page1/, "#page");
+        if (urlhash.indexOf("?tab=") >= 0)
+            window.location.hash = urlhash.substr(0, urlhash.indexOf("?"));
+        if ('enable_ajax_content' in ace) {
+            var options = {
+                content_url: function (url) {
+
+                    if (!url.match(/^page\//))return;
+                    var path = document.location.pathname;
+
+                    //for Ace HTML demo version, convert ajax.html#page/gallery to > gallery.html and load it
+                    if (path.match(/main\.html/)) return path.replace(/main\.html/, url);
+
+                    //for Ace PHP demo version convert "page/dashboard" to "?page=dashboard" and load it
+                    //return path + "?" + url.replace(/\//, "=");
+                },
+                default_url: $("#defaultMainPage").val()//'page/warehouse_operator_home'//default url
+
+            };
+            ace.enable_ajax_content($, options)
+        }
+
+    })
+
+    //全角转换为半角函数 add by lidu
+    function toCDB(str) {
+        var tmp = "";
+        for (var i = 0; i < str.length; i++) {
+            if (str.charCodeAt(i) > 65248 && str.charCodeAt(i) < 65375) {
+                tmp += String.fromCharCode(str.charCodeAt(i) - 65248);
+            }
+            else {
+                tmp += String.fromCharCode(str.charCodeAt(i));
+            }
+        }
+        tmp = tmp.toUpperCase();
+        return tmp
+    }
+
+    function openLoading() {
+        $("#loadingModal").modal({
+            "backdrop": false,
+            "keyboard": true,
+            "show": true
+        });
+    }
+    function closeLoading() {
+        $("#loadingModal").modal("hide");
+    }
+</script>
+
+<div id="loadingModal" class="modal fade" tabindex="-1">
+    <center><img th:src="@{img/loading1.gif}" src="img/loading1.gif" style="margin-top: 100px;"></center>
+</div>
+
+<!--
+    add by lidu at 2015-6-30 9:10
+    与服务端进行WebSocket的连接
+-->
+<script type="text/javascript">
+    //    var uri = 'ws://'+location.host+'/message';
+    //    var webSocket =  new WebSocket(uri);
+    //
+    //    webSocket.onerror = function(event) {
+    //        onError(event)
+    //    };
+    //
+    //    webSocket.onopen = function(event) {
+    //        onOpen(event)
+    //    };
+    //
+    //    webSocket.onmessage = function(event) {
+    //        onMessage(event)
+    //    };
+    //
+    //    function onMessage(event) {
+    //        var message = event.data;
+    //        updateMessage(message);
+    //    }
+    //
+    //    function onOpen(event) {
+    //        console.log("connection start:"+event.data);
+    //    }
+    //
+    //    function onError(event) {
+    //        console.log("connection error:"+event.data);
+    //    }
+    //
+    //    function start() {
+    //        var username = document.getElementById("username").value;
+    //        var content = document.getElementById("content").value;
+    //        webSocket.send(username+':'+content);
+    //        return false;
+    //    }
+    //
+    //    function pushMessage(message) {
+    //        $("#loadingModal").XNotify({
+    //            title: "桌面提醒",
+    //            content: message,
+    //            icon: "/img/workway.png",
+    //            tag: "messageId"
+    //        });
+    //    }
+    //
+    //    /**
+    //     * add by lidu at 2015-06-30 15:50
+    //     * 更新消息提醒
+    //     */
+    //    function updateMessage(messageContent){
+    //        $.ajax({
+    //            url:'updateMessage',
+    //            success: function(msg){
+    //                /**推送桌面通知*/
+    //                if(messageContent!="update"){
+    //                    pushMessage(messageContent);
+    //                }
+    //                $("#messageSize").html(msg.size);
+    //                var str = '<li class="dropdown-header">';
+    //                str += '<i class="ace-icon fa fa-exclamation-triangle"></i>';
+    //                str += '<span>'+msg.size+'</span>个消息';
+    //                str += '</li>';
+    //                for(var i=0;i<msg.msgs.length;i++){
+    //                    var message = msg.msgs[i];
+    //                    str += '<li><a href="'+message.href+'" >';
+    //                    str += '<div class="clearfix">';
+    //                    str += '<span class="pull-left">';
+    //                    str += '<i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>';
+    //                    str += '<span>'+message.name+'</span>';
+    //                    str += '</span>';
+    //                    str += '<span class="pull-right badge badge-info"> '+message.num+'</span>';
+    //                    str += '</div></a></li>';
+    //                }
+    //                $("#messageList").html(str);
+    //            }
+    //        });
+    //    }
+
+</script>
+</body>
+</html>

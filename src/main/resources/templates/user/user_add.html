@@ -1,0 +1,78 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"/>
+<style type="text/css">
+    .td_style {
+        margin-left: 10px;
+        border: 0;
+    }
+
+    .baseInfo {
+        border-collapse: collapse;
+        border: none;
+        width: 100%;
+    }
+
+    .baseInfo td {
+        border: solid #E0E0E0 1px;
+    }
+</style>
+
+<div style="width:400px;">
+    <div style="height: 150px;background-color:#fdfdfe; font-size:11pt;">
+        <form id="userAddForm" action="/user/addUserInfo" method="post">
+            <div style="color:#547EB7">
+                <table class="baseInfo">
+                    <tr>
+                        <td align="center">姓名：</td>
+                        <td>
+                            <input type="text" id="realName" name="realName">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">账号：</td>
+                        <td>
+                            <input type="text" id="userName" name="userName">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">密码：</td>
+                        <td>
+                            <input type="password" id="password" name="password">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+        <div style="margin-top:10px" >
+            <button  style="float: right;" onclick="submitUserInfo(this)">
+                <i class="ace-icon fa fa-check-square-o bigger-120 orange"></i>
+                提交
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    /**
+     * 提交前的验证
+     */
+    function submitUserInfo(obj) {
+        var realName = $("#realName").val();
+        var userName = $("#userName").val();
+        var password = $("#password").val();
+        if(realName == ""){
+            alert("姓名必填!");
+            return;
+        }
+        if(userName == ""){
+            alert("账号必填!");
+            return;
+        }
+        if(password == ""){
+            alert("密码必填!");
+            return;
+        }
+        $(obj).attr("disabled", true);
+        $("#userAddForm").submit();
+    }
+
+</script>

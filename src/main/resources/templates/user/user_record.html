@@ -1,0 +1,211 @@
+<!-- 查询条件 -->
+<div class="container-fluid">
+    <div class="pull-left">
+    </div>
+    <div class="pull-right">
+    </div>
+</div>
+
+<table id="grid-table"></table>
+<div id="grid-pager"></div>
+<script tyle="text/javascript">
+    function enterPress() {//网页内按下回车触发
+        if (event.keyCode == 13) {
+            $("#query").click();
+            return false;
+        }
+    }
+    $('#startDate,#endDate').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        language: "zh-CN",
+        duration: "slow",
+        dateFormat: 'yy-mm-dd  H:m:s'
+    });
+
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var sub_detail = "";
+
+    $(window).on('resize.jqGrid', function () {
+        $(grid_selector).jqGrid('setGridWidth', $(".tab-content").width());
+    });
+    var parent_column = $(grid_selector).closest('[class*="col-"]');
+    $(document).on('settings.ace.jqGrid', function (ev, event_name, collapsed) {
+        if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+            $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+        }
+    });
+
+    jQuery(grid_selector).jqGrid({
+        subGrid: false,
+        datatype: 'json',
+        height: 415,
+        pager: pager_selector,
+        altRows: true,
+        multiselect: false,
+        multiboxonly: true,
+        rownumbers: false,
+        viewrecords: true,
+        url: "user/getAllUserInfo",
+        colNames: ['序号', '账号', '姓名', '操作'],
+        colModel: [
+            {name: 'id', sortable: false},
+            {name: 'userName', sortable: false},
+            {name: 'realName', sortable: false},
+            {name: 'operate', sortable: false}
+        ],
+        loadComplete: function () {
+            var table = this;
+            setTimeout(function () {
+                updatePagerIcons(table);
+                enableTooltips(table);
+            }, 0);
+        },
+        gridComplete:function () {
+            var ids = jQuery(grid_selector).jqGrid('getDataIDs');
+            for (var i=0;i < ids.length; i++){
+                var id = ids[i];
+                var userId = jQuery(grid_selector).jqGrid('getCell', id, 'id');
+                var operateText = "&nbsp;<button type='button' class='btn btn-white btn-sm btn-primary' onclick='deleteUser(\"" + userId + "\")'>删除</button>";
+                jQuery(grid_selector).jqGrid('setRowData', ids[i], {
+                    operate:operateText
+                });
+            }
+        }
+
+
+    }).jqGrid('navGrid', pager_selector,  //分页栏
+            {
+                edit: false, editicon: 'ace-icon fa fa-pencil blue',
+                add: false, addicon: 'ace-icon fa fa-plus-circle purple',
+                del: false, delicon: 'ace-icon fa fa-trash-o red',
+                search: false, searchicon: 'ace-icon fa fa-search orange',
+                refresh: true, refreshicon: 'ace-icon fa fa-refresh green',
+                view: false, viewicon: 'ace-icon fa fa-search-plus grey'
+            },
+            {
+                beforeShowForm: function (e) {
+                    var form = $(e[0]);
+                    form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />');
+                    style_edit_form(form);
+                }
+            }
+    );
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    //enable datepicker
+    function pickDate(cellvalue, options, cell) {
+        setTimeout(function () {
+            $(cell).find('input[type=text]')
+                    .datepicker({format: 'yyyy-mm-dd', autoclose: true});
+        }, 0);
+    }
+
+    function style_edit_form(form) {
+        form.find('input[name=returnDate]').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            language: "zh-CN",
+            duration: "slow"
+        }).end()
+
+        var buttons = form.next().find('.EditButton .fm-button');
+        buttons.addClass('btn btn-sm').find('[class*="-icon"]').hide();//ui-icon, s-icon
+        buttons.eq(0).addClass('btn-primary').prepend('<i class="ace-icon fa fa-check"></i>');
+        buttons.eq(1).prepend('<i class="ace-icon fa fa-times"></i>');
+        buttons = form.next().find('.navButton a');
+        buttons.find('.ui-icon').hide();
+        buttons.eq(0).append('<i class="ace-icon fa fa-chevron-left"></i>');
+        buttons.eq(1).append('<i class="ace-icon fa fa-chevron-right"></i>');
+        $("#returnBarCode.code").change(function () {
+            alert("test");
+        });
+    }
+
+    function style_delete_form(form) {
+        var buttons = form.next().find('.EditButton .fm-button');
+        buttons.addClass('btn btn-sm btn-white btn-round').find('[class*="-icon"]').hide();//ui-icon, s-icon
+        buttons.eq(0).addClass('btn-danger').prepend('<i class="ace-icon fa fa-trash-o"></i>');
+        buttons.eq(1).addClass('btn-default').prepend('<i class="ace-icon fa fa-times"></i>')
+    }
+
+    function style_search_filters(form) {
+        form.find('.delete-rule').val('X');
+        form.find('.add-rule').addClass('btn btn-xs btn-primary');
+        form.find('.add-group').addClass('btn btn-xs btn-success');
+        form.find('.delete-group').addClass('btn btn-xs btn-danger');
+    }
+    function style_search_form(form) {
+        var dialog = form.closest('.ui-jqdialog');
+        var buttons = dialog.find('.EditTable');
+        buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
+        buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
+        buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
+    }
+
+    function beforeDeleteCallback(e) {
+        var form = $(e[0]);
+        if (form.data('styled')) return false;
+        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+        style_delete_form(form);
+        form.data('styled', true);
+    }
+
+    function beforeEditCallback(e) {
+        var form = $(e[0]);
+        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+        style_edit_form(form);
+    }
+
+    //replace icons with FontAwesome icons like above
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+            'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+            'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+            'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    }
+
+    function enableTooltips(table) {
+        $('.navtable .ui-pg-button').tooltip({container: 'body'});
+        $(table).find('.ui-pg-div').tooltip({container: 'body'});
+    }
+
+    $('.chosen-select').chosen({allow_single_deselect: true});
+    //resize the chosen on window resize
+    $(window).on('resize.chosen', function () {
+        $('.chosen-select').next().css({'width': '150px'});
+    }).trigger('resize.chosen');
+
+    function deleteUser(id){
+        var flag = confirm("是否确定删除！");
+        if(!flag){
+            return;
+        }
+        $.ajax({
+            url:"user/deleteUserInfo",
+            dataType:"text",
+            data:{"id":id},
+            success:function(data){
+                if(data=="success"){
+                    alert("删除成功！");
+                    jQuery(grid_selector).trigger("reloadGrid");
+                }else{
+                    alert(data);
+                }
+            }
+        })
+    }
+
+</script>
