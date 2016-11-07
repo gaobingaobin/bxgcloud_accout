@@ -1,0 +1,105 @@
+body {
+    background: url("../images/bg03.png") top center no-repeat;
+    background-size: cover;
+    font-size: 15px;
+}
+.content{
+	background-color: #FFFFFF;
+	opacity: 0.2;
+	background-size: cover;
+}
+
+.login {
+    background-color: #FFFFFF;
+    height: 380px;
+    width: 480px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.loginInput,
+.psdInput {
+    margin: 10px;
+    height: 40px;
+    width: 400px;
+    border: 1px solid #E8E2E2;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+/*.loginInput {
+    background: url();
+    background-size: 100% 100%
+}
+
+.psdInput {
+    background: url("../images/login_psd.png");
+    background-size: 100% 100%
+}*/
+
+.inputCls {
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.register,
+.loginBut {
+    margin: 30px;
+    height: 45px;
+    display: block;
+    color: #FFFFFF;
+}
+
+.loginBut {
+    width: 300px;
+    background-color: #00ACFF;
+    font-size: 25px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #FFFFFF;
+}
+
+.ckbox {
+    width: 25px;
+    height: 25px;
+}
+
+.box {
+	position: relative;
+    margin-left: 40px;
+    margin-top: 10px
+}
+.comName{
+	position: absolute;
+	font-size: 40px;
+	left: 35%;
+	top: 90%;
+
+}
+.h{
+	color: #808080;
+}
+.errorMsg{
+    position: relative;
+    left:40%;
+    height: 15px;
+    width: 300px;
+    color: #00ACFF;
+
+}

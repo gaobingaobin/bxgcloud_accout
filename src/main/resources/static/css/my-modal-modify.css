@@ -1,0 +1,22 @@
+/*add by lidu 2014-12-03*/
+/*改变他们的层级关系，以让datepicker的控件能展示出来，以及升高jqgrid的对话框的层级关系*/
+
+/*改变页头的层级关系*/
+.sidebar.sidebar-fixed {
+    z-index: 7
+}
+
+/*改变modal的层级关系*/
+.modal {
+    z-index: 9
+}
+
+/*改变modal层后面层的层级关系*/
+.modal-backdrop {
+    z-index: 8
+}
+
+/*改变菜单栏样子的层级关系*/
+.navbar-fixed-bottom, .navbar-fixed-top {
+    z-index: 7;
+}
