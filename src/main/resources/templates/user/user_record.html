@@ -48,12 +48,11 @@
         multiboxonly: true,
         rownumbers: false,
         viewrecords: true,
-        url: "user/getAllUserInfo",
-        colNames: ['序号', '账号', '姓名', '操作'],
+        url: "user/getUserInfo",
+        colNames: ['序号', '账号','操作'],
         colModel: [
             {name: 'id', sortable: false},
-            {name: 'userName', sortable: false},
-            {name: 'realName', sortable: false},
+            {name: 'username', sortable: false},
             {name: 'operate', sortable: false}
         ],
         loadComplete: function () {

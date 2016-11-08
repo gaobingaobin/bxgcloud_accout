@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div id="message"></div>
+<button type="button" onclick="getKudiMessage()">查询</button>
+</body>
+<script type="application/javascript">
+    function getKudiMessage() {
+        $.ajax({
+            url:"user/getKuaidiMessage",
+            type:"post",
+            success:function (data) {
+                var message = eval(data);
+                var lenght = message.data.size();
+                for(var i = 0; i<lenght; i++){
+                    $("#message").append("<p>"+message.data[i].time+"</p>")
+
+                }
+            }
+        })
+    }
+</script>
+</html>

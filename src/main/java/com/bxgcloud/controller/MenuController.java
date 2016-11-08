@@ -13,13 +13,14 @@ public class MenuController {
   /**
    * 记账系统主页
     */
-    @RequestMapping("/page_menu")
+    @RequestMapping("/kuaidu_menu")
     public String pageMenu(){
-        return "user/user_menu";
+        return "kuaidi";
     }
 
     @RequestMapping("/user_menu")
     public String userMenu(){
         return "user/user_menu";
     }
+
 }
