@@ -56,12 +56,12 @@ public class UserController {
 
     @RequestMapping("/getKuaidiMessage")
     @ResponseBody
-    public String getKuaidiMessage() {
+    public String getKuaidiMessage(HttpServletRequest request) {
         String sendUrl = "http://www.kuaidi100.com/query";
         HttpClient httpclient = null;
         PostMethod post = null;
-        String type = "zhongtong";
-        String postid = "417151308174";
+        String type = request.getParameter("type");
+        String postid = request.getParameter("postid");
         String info = null;
         try {
             httpclient = new HttpClient();

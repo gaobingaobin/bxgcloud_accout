@@ -22,5 +22,9 @@ public class MenuController {
     public String userMenu(){
         return "user/user_menu";
     }
+    @RequestMapping("/personbill_menu")
+    public String personBillMenu(){
+        return "personbill/personbill_menu";
+    }
 
 }

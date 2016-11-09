@@ -61,10 +61,67 @@ public class CommonBill {
     @Column
     Float perMoney;
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
 
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
+    public Set<UserInfo> getUserInfos() {
+        return userInfos;
+    }
 
+    public void setUserInfos(Set<UserInfo> userInfos) {
+        this.userInfos = userInfos;
+    }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Float getMoney() {
+        return money;
+    }
+
+    public void setMoney(Float money) {
+        this.money = money;
+    }
+
+    public Date getBillDate() {
+        return billDate;
+    }
+
+    public void setBillDate(Date billDate) {
+        this.billDate = billDate;
+    }
+
+    public Float getPerMoney() {
+        return perMoney;
+    }
+
+    public void setPerMoney(Float perMoney) {
+        this.perMoney = perMoney;
+    }
 }

@@ -4,22 +4,107 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style type="text/css">
+    body{
+        padding: 0;
+        margin:  0;
+
+     }
+    .head{
+        width: 100%;
+        height: 60px;
+        background-color: #F9F9F9;
+        line-height: 60px;
+    }
+
+    .search{
+        width: 580px;
+        height: 80px;
+        margin: 10px auto;
+    }
+    .search select{
+        float: left;
+        font-size: 18px;
+        width: 120px;
+        height: 40px;
+        margin-right: 5px;
+    }
+    .search input{
+       font-size: 18px;
+        width: 250px;
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid #E2E2E2;
+        float: left;
+    }
+    .search button{
+        width: 120px;
+        height: 40px;
+        background-color: #3399FF;
+        color: #ffffff;
+        float: left;
+        margin-left: 5px;
+        font-size: 18px;
+        border: 1px solid #ffffff;
+    }
+   .message{
+       width: 680px;
+       height: 400px;
+       margin: 20px auto;
+       font-size: 15px;
+   }
+
+</style>
 <body>
-  <div id="message"></div>
-<button type="button" onclick="getKudiMessage()">查询</button>
+<div class="head">
+    <h1 align="center" style="margin-top: 5px">快递查询</h1>
+</div>
+<div class="search">
+    <select id="type">
+        <option value="shentong">申通</option>
+        <option value="ems">EMS</option>
+        <option value="shunfeng">顺丰</option>
+        <option value="yuantong">圆通</option>
+        <option value="zhongtong">中通</option>
+        <option value="yunda">韵达</option>
+        <option value="huitongkuaidi">汇通</option>
+        <option value="quanfengkuaidi">全峰</option>
+        <option value="yunda">韵达</option>
+        <option value="debangwuliu">德邦</option>
+        <option value="zhaijisong">宅急送</option>
+    </select>
+    <input type="text" id="postid" placeholder="请输入快递单号">
+    <button type="button" onclick="getKudiMessage()">查询</button>
+</div>
+
+<div id="message" class="message"></div>
+
 </body>
 <script type="application/javascript">
-    function getKudiMessage() {
-        $.ajax({
-            url:"user/getKuaidiMessage",
-            type:"post",
-            success:function (data) {
-                var message = eval(data);
-                var lenght = message.data.size();
-                for(var i = 0; i<lenght; i++){
-                    $("#message").append("<p>"+message.data[i].time+"</p>")
 
-                }
+    function getKudiMessage() {
+         var type = $("#type").val();
+         var postid = $("#postid").val();
+        if(type==""){
+            alert("请选择快递公司！");
+            return false;
+        }
+        if(postid==""){
+            alert("请填写快递单号！");
+            $("#postid").focus();
+            return false;
+        }
+        $("#message").html("");
+        $.ajax({
+            url: "user/getKuaidiMessage",
+            type: "post",
+            data:{type:type,postid:postid},
+            success: function (msg) {
+                var message = JSON.parse(msg);
+                $(message.data).each(function (i, v) {
+                    $("#message").append("<p>" + v.time + "&nbsp;&nbsp;&nbsp;"+v.context+"</p>");
+                })
+
             }
         })
     }
