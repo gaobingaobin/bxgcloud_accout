@@ -26,7 +26,7 @@
                 <span class="badge badge-danger"></span>
             </a>
         </li>
-        <button class="btn btn-xs btn-danger" style="float:right;margin-right: 60px;font-size: 15px;" id="userBtn">
+        <button class="btn btn-xs btn-danger" style="float:right;margin-right: 60px;font-size: 15px;" id="addBillBut">
             <i class="ace-icon glyphicon glyphicon-euro"></i>
             添加个人账单
         </button>
@@ -36,7 +36,7 @@
         <div id="contentDiv" class="tab-pane in active"></div>
     </div>
 </div>
-
+<div id="modal" class="modal fade" tabindex="-1"></div>
 <script type="text/javascript">
     var showObj = "#contentDiv";
     $.ajax({
@@ -77,18 +77,19 @@
         var hash = window.location.hash.replace("page1/personbill_menu?tab=", "#");
         $('#myTab a[href="' + hash + '"]').tab('show');
     });
-    $("#userBtn").click(function () {
+    $("#addBillBut").click(function () {
+        $("#modal").html("");
         $.ajax({
             type: "GET",
-            url: "user/addUserInfoPage",
+            url: "personbill/addPersonBillPage",
             error: function (data) {
                 alert("There was a problem");
             },
             success: function (data) {
-                $("#user_add").html(data);
+                $("#modal").html(data);
             }
         });
-        $("#userAddModal").modal({
+        $("#modal").modal({
             "backdrop": 'static',
             "keyboard": true,
             "show": true

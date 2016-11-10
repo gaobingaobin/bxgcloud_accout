@@ -18,6 +18,9 @@ public class UserInfo {
     @Column (length = 20, nullable = false)
     String username;
 
+    @Column (length = 20, nullable = false)
+    String realname;
+
     @Column(length = 20, nullable = false)
     String password;
 
@@ -110,5 +113,13 @@ public class UserInfo {
 
     public void setRegisterDate(Date registerDate) {
         this.registerDate = registerDate;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
     }
 }
