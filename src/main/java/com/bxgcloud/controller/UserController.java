@@ -10,6 +10,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -86,6 +87,13 @@ public class UserController {
         }
 
         return info;
+    }
+
+    @RequestMapping("/getAllUsers")
+    @ResponseBody
+    public  List<UserInfo> getAllUser(){
+        List<UserInfo> list = userinfoRepository.findAll();
+         return list;
     }
 
 

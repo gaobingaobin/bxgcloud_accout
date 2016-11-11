@@ -4,6 +4,7 @@ package com.bxgcloud.model.bill;
 
 
 import com.bxgcloud.model.UserInfo;
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -41,6 +42,7 @@ public class PersonBill {
     /**
      * 账单生成日期
      */
+    @Expose
     @Column
     Date billDate;
 

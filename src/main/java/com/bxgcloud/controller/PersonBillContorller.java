@@ -11,7 +11,10 @@ import com.bxgcloud.util.PageTool;
 import com.bxgcloud.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,20 +65,22 @@ public class PersonBillContorller {
      * 跳转增加账单页面
     */
     @RequestMapping("/addPersonBillPage")
-    public String addPersonBillPage(){
+    public String addPersonBillPage(Model model){
         return "personbill/personbill_add";
     }
     /**@author gaobin
      * 增加个人账单
      */
-    @RequestMapping("/addPersonBill")
+    @RequestMapping(value = "/addPersonBill",produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional
     public  String addPersonBill(HttpServletRequest request) throws ParseException {
         String userId =request.getParameter("userId");
         String type =request.getParameter("type");
         String money =request.getParameter("money");
         String remark =request.getParameter("remark");
         String billDate =request.getParameter("billDate");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse(billDate);
         PersonBill personBill = new PersonBill();
         UserInfo userInfo = userinfoRepository.findById(Integer.parseInt(userId));
