@@ -147,12 +147,12 @@
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="" class="dropdown-toggle">
                         <img class="nav-user-photo" src="avatars/avatar4.png" alt="张三照片"/>
-								<span class="user-info" >
+								<span class="user-info" th:text="${session.currUser.realname}">
 									张三
 								</span>
-
                         <i class="ace-icon fa fa-caret-down"></i>
                     </a>
+                    <input type="hidden" id="currentUserName" th:value="${session.currUser.realname}"/>
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <!--<li>-->
                         <!--<a href="">-->

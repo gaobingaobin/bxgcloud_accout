@@ -1,7 +1,11 @@
 package com.bxgcloud.controller;
 
+import com.bxgcloud.util.userUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by gaobin on 2016/11/7.
@@ -13,7 +17,7 @@ public class MenuController {
   /**
    * 记账系统主页
     */
-    @RequestMapping("/kuaidu_menu")
+    @RequestMapping("/kuaidi_menu")
     public String pageMenu(){
         return "kuaidi";
     }
@@ -26,5 +30,9 @@ public class MenuController {
     public String personBillMenu(){
         return "personbill/personbill_menu";
     }
-
+    @RequestMapping("/websocket_menu")
+    public String webScoket(HttpServletRequest request,Model model){
+       model.addAttribute("userinfo", userUtil.getCurrentUser(request));
+        return "websocket";
+    }
 }

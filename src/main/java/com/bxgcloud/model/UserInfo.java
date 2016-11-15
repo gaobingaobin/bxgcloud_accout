@@ -42,6 +42,9 @@ public class UserInfo {
     @Column
     Date registerDate; //注册日期
 
+    @Column
+    String logoname;
+
 
     public Integer getId() {
         return id;
@@ -121,5 +124,13 @@ public class UserInfo {
 
     public void setRealname(String realname) {
         this.realname = realname;
+    }
+
+    public String getLogoname() {
+        return logoname;
+    }
+
+    public void setLogoname(String logoname) {
+        this.logoname = logoname;
     }
 }
