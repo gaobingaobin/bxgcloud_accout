@@ -39,12 +39,6 @@
             font-size: 18px;
             border: 1px solid #ffffff;
         }
-
-       /* .message img {
-            width: 30px;
-            height: 30px;
-        }*/
-
         .layim-chat-text:after {
             content: '';
             position: absolute;
@@ -163,5 +157,11 @@
         websocket.send('<div class="layim-chat-user" ><img  src='+imgSrc+'><cite>'+user+'</cite></div>'+'<div class="layim-chat-text">'+message+'</div>');
         $("#text").val('');
     }
+    $(document).keyup(function(event){
+        switch(event.keyCode) {
+            case 13:
+                send();
+        }
+    });
 </script>
 </html>
