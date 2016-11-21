@@ -1,7 +1,10 @@
 package com.bxgcloud.controller;
 
+import com.bxgcloud.model.UserInfo;
+import com.bxgcloud.util.userUtil;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -28,12 +31,16 @@ public class WebSocketController {
     public void onOpen(Session session) {
         this.session = session;
         webSocketSet.add(this);     //加入set中
-        addOnlineCount();           //在线数加1
+        addOnlineCount();
+        //在线数加1
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
-        try {
-            sendMessage("欢迎加入聊天平台！当前在线人数为" + getOnlineCount());
-        } catch (IOException e) {
-            System.out.println("IO异常");
+        //群发消息
+        for (WebSocketController item : webSocketSet) {
+            try {
+                item.sendMessage("当前在线人数为" + getOnlineCount());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -11,16 +11,19 @@
         }
 
         .message {
-            width: 100%;
-            height: 400px;
+            width: 80%;
+            height: 500px;
             background-color: #ffffff;
             overflow: scroll;
+            float: left;
         }
 
         .inputMsg {
-            width: 100%;
-            height: 120px;
-            background-color: #F9F9F9;
+            width: 80%;
+            height: 60px;
+            background-color: #ffffff;
+            z-index: 100;
+            float: left;
         }
 
         .inputMsg textarea {
@@ -55,8 +58,8 @@
         .layim-chat-text {
             position: relative;
             line-height: 22px;
-            margin-top: 31px;
-            margin-left: 30px;
+            margin-top: 5px;
+            margin-left: 14px;
             padding: 10px 15px;
             background-color: #eee;
             border-radius: 3px;
@@ -67,7 +70,6 @@
             max-width: 462px \9;
         }
         .layim-chat-user {
-            position: absolute;
             font-size: 12px;
             left: 3px;
             color:#808080;
@@ -83,6 +85,31 @@
             height: 40px;
             border-radius: 100%;
         }
+        .userList{
+            width: 20%;
+            height: 560px;
+            float: left;
+            background-color: #F9F9F9;
+        }
+        .userList img{
+            width: 60px;
+            height: 60px;
+            border-radius: 100%;
+            float: left;
+        }
+        .user{
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+
+        }
+        .user:hover{
+            background-color: #ffffff;
+        }
+        .user span{
+            font-size: 15px;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -91,6 +118,7 @@
 <input type="hidden" th:value="${userinfo.realname}" id="user">
 <input type="hidden" th:value="${userinfo.logoname}" id="userlogo">
 <div class="head"></div>
+<div class="userList" id="userList"></div>
 <div class="message" id="message">
 
 </div>
@@ -120,12 +148,15 @@
 
     //连接成功建立的回调方法
     websocket.onopen = function (event) {
-        setMessageInnerHTML("连接成功");
+        setMessageInnerHTML("连接成功，欢迎加入聊天平台！");
+        setUserListInnerHTML();
     }
 
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
-        setMessageInnerHTML(event.data);
+            setMessageInnerHTML(event.data);
+
+
     }
 
     //连接关闭的回调方法
@@ -140,8 +171,13 @@
 
     //将消息显示在网页上
     function setMessageInnerHTML(innerHTML) {
-
         document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+    function setUserListInnerHTML() {
+        var imgSrc = "../css/images/"+$("#userlogo").val();
+        var user = $("#user").val();
+        var html = '<div class="user" ><img  src='+imgSrc+'><span></span>'+user+'</div>'
+        document.getElementById('userList').innerHTML += html;
     }
 
     //关闭连接
