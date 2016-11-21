@@ -42,8 +42,7 @@ public class PersonBill {
     /**
      * 账单生成日期
      */
-    @Expose
-    @Column
+    @Temporal(TemporalType.DATE)
     Date billDate;
 
     public Integer getId() {

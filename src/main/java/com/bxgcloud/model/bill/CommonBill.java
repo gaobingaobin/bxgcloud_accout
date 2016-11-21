@@ -53,7 +53,7 @@ public class CommonBill {
     /**
      * 账单生成日期
      */
-    @Column
+    @Temporal(TemporalType.DATE) //时间格式话注解 详情： http://blog.csdn.net/shuangrenyu1234/article/details/38797761
     Date billDate;
     /**
      * 每人分担金额

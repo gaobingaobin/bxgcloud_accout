@@ -94,8 +94,24 @@ public class PersonBillContorller {
         personBillRepository.save(personBill);
         return "success";
 
+    }
+    /**@author gaobin
+     * 删除个人账单
+     */
+    @RequestMapping(value = "/deletePersonBill",produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    @Transactional
+    public String deletePersonBill(HttpServletRequest request){
+        String id = request.getParameter("id");
+        if(StringUtil.isNotBlank(id)){
+            personBillRepository.delete(Integer.parseInt(id));
+        }
+        return "success";
+
+
 
 
     }
+
 
 }

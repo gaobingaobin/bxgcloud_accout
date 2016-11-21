@@ -73,8 +73,8 @@
             var ids = jQuery(grid_selector).jqGrid('getDataIDs');
             for (var i=0;i < ids.length; i++){
                 var id = ids[i];
-                var userId = jQuery(grid_selector).jqGrid('getCell', id, 'id');
-                var operateText = "&nbsp;<button type='button' class='btn btn-white btn-sm btn-primary' onclick='deleteUser(\"" + userId + "\")'>删除</button>";
+                var Id = jQuery(grid_selector).jqGrid('getCell', id, 'id');
+                var operateText = "&nbsp;<button type='button' class='btn btn-white btn-sm btn-primary' onclick='deletePersonBill(\"" + Id + "\")'>删除</button>";
                 jQuery(grid_selector).jqGrid('setRowData', ids[i], {
                     operate:operateText
                 });
@@ -194,15 +194,16 @@
         $('.chosen-select').next().css({'width': '150px'});
     }).trigger('resize.chosen');
 
-    function deleteUser(id){
+    function deletePersonBill(id){
         var flag = confirm("是否确定删除！");
         if(!flag){
             return;
         }
         $.ajax({
-            url:"user/deleteUserInfo",
+            url:"personbill/deletePersonBill",
             dataType:"text",
             data:{"id":id},
+            type:'post',
             success:function(data){
                 if(data=="success"){
                     alert("删除成功！");
@@ -211,7 +212,7 @@
                     alert(data);
                 }
             }
-        })
+        });
     }
 
 </script>
