@@ -3,15 +3,15 @@ package com.bxgcloud.controller;
 
 import com.bxgcloud.model.UserInfo;
 import com.bxgcloud.model.bill.MessageChat;
+import com.bxgcloud.repository.MessageChatRepository;
 import com.bxgcloud.repository.UserinfoRepository;
+import com.bxgcloud.util.GsonUtils;
 import com.bxgcloud.util.SessionMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -36,6 +36,8 @@ public class ChatController {
     private String to;  //接收人
     @Autowired
     private UserinfoRepository userinfoRepository;
+    @Autowired
+    private MessageChatRepository messageChatRepository;
 
     /**
      * 连接建立成功调用的方法*/
@@ -50,19 +52,9 @@ public class ChatController {
         SessionMap.getSessionMap().put(from,session);
         Session sessionto = SessionMap.getSessionMap().get(to);
         if(sessionto!=null){
-            sendMessage("在线");//接受人的状态  上线
+            session.getBasicRemote().sendText("在线");//接受人的状态  上线
         }else{
-            sendMessage("下线");
-        }
-
-        System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
-        //群发消息
-        for (ChatController item : webSocketSet) {
-            try {
-                item.sendMessage("当前在线人数为" + getOnlineCount());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            session.getBasicRemote().sendText("下线");
         }
     }
 
@@ -71,7 +63,7 @@ public class ChatController {
      */
     @OnClose
     public void onClose() {
-        webSocketSet.remove(this);  //从set中删除
+        SessionMap.getSessionMap().remove(from);
         subOnlineCount();           //在线数减1
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
@@ -87,46 +79,34 @@ public class ChatController {
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             UserInfo fromUser = userinfoRepository.findOne(Integer.parseInt(from));
             UserInfo toUser = userinfoRepository.findOne(Integer.parseInt(to));
-            messageChat.setFrom(fromUser);
-            messageChat.setTo(toUser);
+            messageChat.setFromUser(fromUser);
+            messageChat.setToUser(toUser);
             messageChat.setMessage(message);
             messageChat.setToDate(date);
-
-        /*    Session sessionto = SessionMap.getSessionMap().get(to);
+            Session sessionto = SessionMap.getSessionMap().get(to);
             if(sessionto!=null){
-                messageChat.setReadtype("1");
-               *//* sysLogger.info("*** *** WebSocket opened to ship " + to);*//*
-                sessionto.getBasicRemote().sendText(JSONArray.toJSONString(messageChat));
-                session.getBasicRemote().sendText("online");
+                messageChat.setReadtype(1L);
+                sessionto.getBasicRemote().sendText(GsonUtils.toJson(messageChat));
+                session.getBasicRemote().sendText("在线");
             }else {
-                messageChat.setReadtype("0");
-                session.getBasicRemote().sendText("offline");
+                messageChat.setReadtype(0L);
+                session.getBasicRemote().sendText("下线");
             }
-
-            chatInfoServer.insert(messageChat);*/
+            messageChatRepository.save(messageChat);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-   /* System.out.println("来自客户端的消息:" + message);
-
-    //群发消息
-    for (ChatController item : webSocketSet) {
-        try {
-            item.sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 }
 
     /**
      * 发生错误时调用
      @OnError
      public void onError(Session session, Throwable error) {
-     System.out.println("发生错误");
-     error.printStackTrace();
+     // 添加处理错误的操作
+     System.out.println(t.getMessage());
+     System.out.println(t.getCause());
+     t.printStackTrace();
      }
 
 
@@ -134,7 +114,17 @@ public class ChatController {
      this.session.getBasicRemote().sendText(message);
      //this.session.getAsyncRemote().sendText(message);
      }
-
+     /**
+      * 发生错误时调用
+     @OnError
+     */
+     @OnError
+     public void onError(Throwable t) {
+     // 添加处理错误的操作
+     System.out.println(t.getMessage());
+     System.out.println(t.getCause());
+     t.printStackTrace();
+     }
 
      /**
       * 群发自定义消息

@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"/>
+<html>
+<head>
+    <title>My WebSocket</title>
+    <style type="text/css">
+        .head {
+            width: 100%;
+            height: 80px;
+            background-color: #1FB6D3;
+        }
+
+        .message {
+            width: 80%;
+            height: 500px;
+            background-color: #ffffff;
+            overflow: scroll;
+            float: left;
+        }
+
+        .inputMsg {
+            width: 80%;
+            height: 60px;
+            background-color: #ffffff;
+            z-index: 100;
+            float: left;
+        }
+
+        .inputMsg textarea {
+            width: 90%;
+            float: left;
+            height: 60px;
+        }
+
+        .inputMsg button {
+            width: 8%;
+            height: 60px;
+            background-color: #3399FF;
+            color: #ffffff;
+            float: left;
+            margin-left: 5px;
+            font-size: 18px;
+            border: 1px solid #ffffff;
+        }
+        .layim-chat-text:after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 7px;
+            width: 0;
+            height: 0;
+            border-style: solid dashed dashed;
+            border-color: #eee transparent transparent;
+            overflow: hidden;
+            border-width: 10px;
+        }
+
+        .layim-chat-text {
+            position: relative;
+            line-height: 22px;
+            margin-top: 5px;
+            margin-left: 14px;
+            padding: 10px 15px;
+            background-color: #eee;
+            border-radius: 3px;
+            color: #333;
+            font-size: 14px;
+            word-break: break-all;
+            min-width: 60px;
+            max-width: 462px \9;
+        }
+        .layim-chat-user {
+            font-size: 12px;
+            left: 3px;
+            color:#808080;
+        }
+        .layim-chat-text, .layim-chat-user {
+            display: inline-block;
+            vertical-align: top;
+
+
+        }
+        .layim-chat-user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+        }
+        .userList{
+            width: 20%;
+            height: 560px;
+            float: left;
+            background-color: #F9F9F9;
+        }
+        .userList img{
+            width: 60px;
+            height: 60px;
+            border-radius: 100%;
+            float: left;
+        }
+        .user{
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+
+        }
+        .user:hover{
+            background-color: #ffffff;
+        }
+        .user span{
+            font-size: 15px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<input type="hidden" th:value="${userinfo.realname}" id="user">
+<input type="hidden" th:value="${userinfo.logoname}" id="userlogo">
+<div class="head"></div>
+<div class="userList" id="userList"></div>
+<div class="message" id="message">
+
+</div>
+<div class="inputMsg">
+    <textarea id="text" type="text"></textarea>
+    <button onclick="send()">发送</button>
+</div>
+
+
+</body>
+
+<script type="text/javascript">
+    var websocket = null;
+    var currentUserName = $("#currentUserName").val()
+
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        websocket = new WebSocket("ws://localhost:8090/websocket");
+    }
+    else {
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function (event) {
+        setMessageInnerHTML("连接成功，欢迎加入聊天平台！");
+        setUserListInnerHTML();
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+            setMessageInnerHTML(event.data);
+
+
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        setMessageInnerHTML("close");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        websocket.close();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+    function setUserListInnerHTML() {
+        var imgSrc = "../css/images/"+$("#userlogo").val();
+        var user = $("#user").val();
+        var html = '<div class="user" ><img  src='+imgSrc+'><span></span>'+user+'</div>'
+        document.getElementById('userList').innerHTML += html;
+    }
+
+    //关闭连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send() {
+        var message = document.getElementById('text').value;
+        var imgSrc = "../css/images/"+$("#userlogo").val();
+        var user = $("#user").val();
+        websocket.send('<div class="layim-chat-user" ><img  src='+imgSrc+'><cite>'+user+'</cite></div>'+'<div class="layim-chat-text">'+message+'</div>');
+        $("#text").val('');
+    }
+    $(document).keyup(function(event){
+        switch(event.keyCode) {
+            case 13:
+                send();
+        }
+    });
+</script>
+</html>

@@ -19,26 +19,26 @@ class MessageChat {
 
     @Id
     @GeneratedValue
-    Integer id;
+    Long id;
 
     @ManyToOne
-    @JoinColumn(name="to")
-    UserInfo to;
+    @JoinColumn(name="toUser")
+    UserInfo toUser;
 
     @ManyToOne
-    @JoinColumn(name="from")
-    UserInfo from;
+    @JoinColumn(name="fromUser")
+    UserInfo fromUser;
 
     @Column
     String message
 
-    @Temporal(TemporalType.TIMESTAMP)
+   @Column
     String toDate
 
     /**
      * 是否收到标识  0 未收到 1 收到
     */
     @Column
-    Integer readtype
+    Long readtype
 
 }

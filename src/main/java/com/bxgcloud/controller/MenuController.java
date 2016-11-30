@@ -35,6 +35,11 @@ public class MenuController {
        model.addAttribute("userinfo", userUtil.getCurrentUser(request));
         return "websocket";
     }
+    @RequestMapping("/chat_menu")
+    public String chat(HttpServletRequest request,Model model){
+        model.addAttribute("userinfo", userUtil.getCurrentUser(request));
+        return "chat";
+    }
     @RequestMapping("/commonbill_menu")
     public String commonbillMenu(){
         return "commonbill/commonbill_menu";
