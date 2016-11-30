@@ -1,0 +1,191 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"/>
+<style type="text/css">
+    .label_right {
+        width: 130px;
+        text-align: right;
+        font-size: 13pt;
+        font-weight: 300;
+    }
+    .detailEdtail {
+        height: 300px;
+        overflow:scroll;
+    }
+    .saveBtn {
+        float: right;
+        font-size: 15px;
+        color: #FFFFFF;
+        display: block;
+        line-height: 40px;
+        height: 40px;
+        text-align: center;
+        width: 80px;
+        background-color: #428BCA;
+        border: 1px #c3c3c3 solid;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+    .content{
+        background-color: #FFFFFF;
+    }
+    .content input{
+        width: 300px;
+        height: 38px;
+        float: left;
+        margin-left: 10px;
+    }
+    .content select{
+        width: 300px;
+        height: 38px;
+        float: left;
+        margin-left: 10px;
+    }
+</style>
+<div class="modal-dialog" style="width:600px">
+    <div class="modal-content">
+        <div class="modal-header no-padding">
+            <div class="table-header" style="cursor: move;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        id="closeBtn">
+                    <span>&times;</span>
+                </button>
+                公共账单
+            </div>
+        </div>
+        <div class="modal-body no-padding" style="margin: 10px;" >
+            <div id="detailHead" style="font-size: 14px;" class="content">
+                <form class="form-horizontal" role="form" method="post" action="" id="form" align="center">
+                    <div class="form-group">
+                        <input id="id" name="id" type="hidden">
+                        <label class="col-sm-2 control-label no-padding-right" >账单人<span style="color: red">*</span></label>
+                       <select id="userId" name="userId">
+                           <option value="">请选择账单人</option>
+                       </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right" >账单类型<span style="color: red">*</span></label>
+                        <input type="text" id="type" name="type" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right" >账单金额<span style="color: red">*</span></label>
+                        <input type="text" id="money" name="money" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right" >账单日期<span style="color: red">*</span></label>
+                        <input type="text" id="billDate" name="billDate" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right" >分担金额<span style="color: red">*</span></label>
+                        <input type="text" id="perMoney" name="perMoney" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right" >账单分单人<span style="color: red">*</span></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right" >备注<span style="color: red">*</span></label>
+                        <textarea type="text" name="remark" id="remark" style="width: 300px;height: 60px;float: left;margin-left: 10px"></textarea>
+
+                    </div>
+                </form>
+                <div class="clearfix form-actions">
+                    <button class="btn btn-white btn-info btn-bold" onclick="addUserPage()">
+                        <i class="ace-icon fa glyphicon-plus bigger-120 blue"></i>
+                        账单人添加
+                    </button>
+                    <button type="button" class="saveBtn" id="resumeSave" onclick="addPersonBill()">
+                        <span class="bigger-110">保存</span>
+                        <i class="icon-arrow-right icon-on-right"></i>
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!--.modal-content -->
+
+</div>
+<script src="js/chosen.jquery.min.js"></script>
+<script src="js/jquery.tips.js"></script>
+<script src="js/util.js"></script>
+<script style="text/javascript">
+    $('#billDate').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        language: "zh-CN",
+        duration: "slow"
+    });
+    function addPersonBill() {
+        var userId = $("#userId").val();
+        var type = $("#type").val();
+        var money = $("#money").val();
+        var remark = $("#remark").val();
+        var billDate = $("#billDate").val();
+        if(!checkTip(userId,'userId','请填写账单人！')){
+            return false
+        }
+        if(!checkTip(type,'type','请填写账单类型！')){
+            return false
+        }
+        if(!checkTip(money,'money','请填写账单金额！')){
+            return false
+        }
+        if(!checkTip(billDate,'billDate','请填写账单日期！')){
+            return false
+        }
+        $.ajax({
+            url:"personbill/addPersonBill",
+            type:"post",
+            dataType:'text',
+            data:{userId:userId,type:type,money:money,remark:remark,billDate:billDate},
+            success:function (data) {
+                if(data=="success"){
+                    alert("保存成功！")
+                    $("#modal").modal('hide');
+                    jQuery(grid_selector).jqGrid("setGridParam", {
+                        datatype: "json",
+                        search: true,
+                        mtype: "post"
+                    }).trigger("reloadGrid");
+                }
+            },
+            error: function (e) {
+                alert("出错：" + e.responseText);
+            }
+            
+        });
+    }
+$(function () {
+    $.ajax({
+        url: "user/getAllUsers",
+        type: "post",
+        success: function (data) {
+            $("#userId .clear").remove();
+            $.each(data, function (i, n) {
+                $("<option>").val(n.id).text(n.realname).addClass("clear").appendTo($("#userId"));
+            });
+            $("#userId").trigger("chosen:updated");
+        },
+        error: function (e) {
+            alert("出错：" + e);
+        }
+    });
+})
+  function addUserPage() {
+      $("#minModal").html("");
+      $.ajax({
+          type: "GET",
+          url: "commonbill/apply",
+          error: function (data) {
+              alert("There was a problem");
+          },
+          success: function (data) {
+              $("#minModal").html(data);
+          }
+      });
+      $("#minModal").modal({
+          "backdrop": 'static',
+          "keyboard": true,
+          "show": true
+      });
+  }
+</script>
