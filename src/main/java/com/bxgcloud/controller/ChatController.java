@@ -1,27 +1,21 @@
 package com.bxgcloud.controller;
 
 
-import com.bxgcloud.model.UserInfo;
-import com.bxgcloud.model.bill.MessageChat;
-import com.bxgcloud.repository.MessageChatRepository;
-import com.bxgcloud.repository.UserinfoRepository;
-import com.bxgcloud.util.GsonUtils;
+import com.bxgcloud.service.MessageChatService;
 import com.bxgcloud.util.SessionMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.annotation.AccessType;
+import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@Controller
 @ServerEndpoint(value = "/websocket/{from}/{to}")
-@Component
 public class ChatController {
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
@@ -35,9 +29,8 @@ public class ChatController {
     private String from; //发送人
     private String to;  //接收人
     @Autowired
-    private UserinfoRepository userinfoRepository;
-    @Autowired
-    private MessageChatRepository messageChatRepository;
+    private MessageChatService messageChatService;
+
 
     /**
      * 连接建立成功调用的方法*/
@@ -52,9 +45,9 @@ public class ChatController {
         SessionMap.getSessionMap().put(from,session);
         Session sessionto = SessionMap.getSessionMap().get(to);
         if(sessionto!=null){
-            session.getBasicRemote().sendText("在线");//接受人的状态  上线
+            session.getBasicRemote().sendText("该用户在线");//接受人的状态  上线
         }else{
-            session.getBasicRemote().sendText("下线");
+            session.getBasicRemote().sendText("该用户下线");
         }
     }
 
@@ -75,24 +68,14 @@ public class ChatController {
     @OnMessage
     public void onMessage(String message, Session session) {
         try {
-            MessageChat messageChat = new MessageChat();
-            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-            UserInfo fromUser = userinfoRepository.findOne(Integer.parseInt(from));
-            UserInfo toUser = userinfoRepository.findOne(Integer.parseInt(to));
-            messageChat.setFromUser(fromUser);
-            messageChat.setToUser(toUser);
-            messageChat.setMessage(message);
-            messageChat.setToDate(date);
+            Long readtype = 0L;
             Session sessionto = SessionMap.getSessionMap().get(to);
             if(sessionto!=null){
-                messageChat.setReadtype(1L);
-                sessionto.getBasicRemote().sendText(GsonUtils.toJson(messageChat));
-                session.getBasicRemote().sendText("在线");
+                sessionto.getBasicRemote().sendText(message);
             }else {
-                messageChat.setReadtype(0L);
                 session.getBasicRemote().sendText("下线");
             }
-            messageChatRepository.save(messageChat);
+         // messageChatService.saveMessage(from,to,message,readtype);
         } catch (IOException e) {
             e.printStackTrace();
         }

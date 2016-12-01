@@ -174,7 +174,7 @@
         document.getElementById('message').innerHTML += innerHTML + '<br/>';
     }
     function setUserListInnerHTML() {
-        var imgSrc = "../css/images/"+$("#userlogo").val();
+        var imgSrc = $("#userlogo").val();
         var user = $("#user").val();
         var html = '<div class="user" ><img  src='+imgSrc+'><span></span>'+user+'</div>'
         document.getElementById('userList').innerHTML += html;
@@ -188,7 +188,7 @@
     //发送消息
     function send() {
         var message = document.getElementById('text').value;
-        var imgSrc = "../css/images/"+$("#userlogo").val();
+        var imgSrc = $("#userlogo").val();
         var user = $("#user").val();
         websocket.send('<div class="layim-chat-user" ><img  src='+imgSrc+'><cite>'+user+'</cite></div>'+'<div class="layim-chat-text">'+message+'</div>');
         $("#text").val('');
