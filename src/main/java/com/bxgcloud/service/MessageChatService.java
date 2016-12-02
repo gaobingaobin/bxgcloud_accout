@@ -6,6 +6,7 @@ import com.bxgcloud.repository.MessageChatRepository;
 import com.bxgcloud.repository.UserinfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,14 +21,14 @@ public class MessageChatService {
     @Autowired
     private MessageChatRepository messageChatRepository;
 
-    public void saveMessage(String from, String to, String message,Long redytype){
+    public void saveMessage(String from, String to, WebSocketMessage<?> message, Long redytype){
         MessageChat messageChat = new MessageChat();
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         UserInfo fromUser = userinfoRepository.findOne(Integer.parseInt(from));
         UserInfo toUser =  userinfoRepository.findOne(Integer.parseInt(to));
         messageChat.setFromUser(fromUser);
         messageChat.setToUser(toUser);
-        messageChat.setMessage(message);
+        messageChat.setMessage(message.toString());
         messageChat.setToDate(date);
         messageChat.setReadtype(redytype);
         messageChatRepository.save(messageChat);

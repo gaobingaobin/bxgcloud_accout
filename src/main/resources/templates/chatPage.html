@@ -13,7 +13,7 @@
         <div class="modal-header no-padding">
             <div class="table-header" style="cursor: move;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                        id="closeBtn">
+                        id="closeBtn" onclick="closeWebSocket()">
                     <span>&times;</span>
                 </button>
                 <input type="hidden" id="toUsernameId" th:value="${userInfo.id}">
@@ -43,7 +43,7 @@
 
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8090/websocket/"+fromUsernameId+"/"+toUsernameId);
+        websocket = new WebSocket("ws://localhost:8090/websocket?"+fromUsernameId+"&"+toUsernameId);
     }
     else {
         alert('Not support websocket')
@@ -61,6 +61,7 @@
 
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
+        console.log(event.data);
             setMessageInnerHTML(event.data);
 
 
@@ -99,6 +100,7 @@
         var user = $("#fromRealname").val();
         var meassgeTxt ='<div class="layim-chat-user" ><img  src='+imgSrc+'><cite>'+user+'</cite></div>'+'<div class="layim-chat-text">'+message+'</div>'
         websocket.send(meassgeTxt);
+        console.log(meassgeTxt);
         $("#text").val('');
       /*  document.getElementById('message').innerHTML += meassgeTxt + '<br/>';*/
 
