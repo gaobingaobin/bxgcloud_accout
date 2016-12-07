@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!--/* bootstrap & fontawesome */-->
     <link rel="stylesheet" th:href="@{css/bootstrap.min.css}" href="css/bootstrap.min.css"/>
-
+    <link rel="stylesheet" th:href="@{css/customize/chat.css}" href="css/customize/chat.css">
     <link rel="stylesheet" th:href="@{css/font-awesome.min.css}" href="css/font-awesome.min.css"/>
 
     <!--/* page specific plugin styles */-->
@@ -121,11 +121,12 @@
                             5条消息
                         </li>
                         <li>
-                            <a href="#">
-                                <img src="avatars/avatar.png" class="msg-photo" alt="Alex's Avatar">
+                            <a href="#" th:each="user,userStat:${userInfos}" th:id="${user.id}" onclick="showChatModel(this.id)">
+                                <img th:src="${user.logoname}" class="msg-photo" alt="Alex's Avatar">
 										<span class="msg-body">
 											<span class="msg-title">
-												<span class="blue">Alex:</span>
+												<span class="blue" th:text="${user.realname}">Alex:</span>
+                                                <input type="hidden" id="hToUserName" th:value="${user.realname}">
 												不知道写啥 ...
 											</span>
 
@@ -136,40 +137,6 @@
 										</span>
                             </a>
                         </li>
-
-                        <li>
-                            <a href="#">
-                                <img src="avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar">
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">Susan:</span>
-												不知道翻译...
-											</span>
-											<span class="msg-time">
-												<i class="icon-time"></i>
-												<span>20分钟以前</span>
-											</span>
-										</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <img src="avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar">
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">Bob:</span>
-												到底是不是英文 ...
-											</span>
-
-											<span class="msg-time">
-												<i class="icon-time"></i>
-												<span>下午3:15</span>
-											</span>
-										</span>
-                            </a>
-                        </li>
-
                         <li>
                             <a href="inbox.html">
                                 查看所有消息
@@ -208,8 +175,6 @@
 
                     </ul>
                 </li>
-
-
                 <!--/* #section:basics/navbar.user_menu */-->
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="" class="dropdown-toggle">
@@ -221,13 +186,6 @@
                     </a>
                     <input type="hidden" id="currentUserName" th:value="${session.currUser.username}"/>
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                        <!--<li>-->
-                        <!--<a href="">-->
-                        <!--<i class="ace-icon fa fa-cog"></i>-->
-                        <!--设置-->
-                        <!--</a>-->
-                        <!--</li>-->
-
                         <li class="divider"></li>
 
                         <li>
@@ -295,300 +253,6 @@
                 </ul>
             </li>
         </ul>
-        <!--/*-->
-        <!--<ul class="nav nav-list">
-        <li ui-sref-active="active">
-            <a ui-sref="home">
-                <i class="menu-icon fa fa-home"></i>
-                <span class="menu-text"> 仓库 </span>
-            </a>
-
-            <b class="arrow"></b>
-        </li>
-        <li class="">
-            <a href="" class="dropdown-toggle">
-                <i class="menu-icon fa fa-download"></i>
-                <span class="menu-text"> 入库管理 </span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-
-            <b class="arrow"></b>
-
-            <ul class="submenu">
-                <li ui-sref-active="active">
-                    <a ui-sref="purchase_in">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        采购入库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="" ui-sref-active="active">&lt;!&ndash;ui-sref-active="active"&ndash;&gt;
-                    <a ui-sref="detach_entry">&lt;!&ndash;detach_entry&ndash;&gt;
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        拆机入库
-                    </a>
-                    <b class="arrow"></b>
-                </li>
-
-
-                <li ui-sref-active="active">
-                    <a ui-sref="borrow_entry">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        借件入库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                &lt;!&ndash;<li ui-sref-active="active">&ndash;&gt;
-                &lt;!&ndash;<a ui-sref="repair_entry">&ndash;&gt;
-                &lt;!&ndash;<i class="menu-icon fa fa-caret-right"></i>&ndash;&gt;
-                &lt;!&ndash;保修内维修入库&ndash;&gt;
-                &lt;!&ndash;</a>&ndash;&gt;
-
-                &lt;!&ndash;<b class="arrow"></b>&ndash;&gt;
-                &lt;!&ndash;</li>&ndash;&gt;
-
-                <li ui-sref-active="active">
-                    <a ui-sref="return_entry">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        借出件返还入库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-            </ul>
-        </li>
-
-        <li class="">
-            <a href="" class="dropdown-toggle">
-                <i class="menu-icon fa fa-upload"></i>
-                <span class="menu-text"> 出库管理 </span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-
-            <b class="arrow"></b>
-            <ul class="submenu">
-                <li ui-sref-active="active">
-                    <a ui-sref="sale_out">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        销售出库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li ui-sref-active="active">
-                    <a ui-sref="discard_out">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        报废出库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li ui-sref-active="active">
-                    <a ui-sref="return_out">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        借入件返还
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li ui-sref-active="active">
-                    <a ui-sref="lend_out">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        贷出件出库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                &lt;!&ndash;<li class="">&ndash;&gt;
-                &lt;!&ndash;<a href="mobile-menu-3.html">&ndash;&gt;
-                &lt;!&ndash;<i class="menu-icon fa fa-caret-right"></i>&ndash;&gt;
-                &lt;!&ndash;委托维修&ndash;&gt;
-                &lt;!&ndash;</a>&ndash;&gt;
-
-                &lt;!&ndash;<b class="arrow"></b>&ndash;&gt;
-                &lt;!&ndash;</li>&ndash;&gt;
-            </ul>
-        </li>
-
-        <li class="">
-            <a href="" class="dropdown-toggle">
-                &lt;!&ndash;<i class="menu-icon fa fa-database"></i>&ndash;&gt;
-                <i class="menu-icon fa fa-cog"></i>
-                <span class="menu-text"> 其它出入库 </span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-
-            <b class="arrow"></b>
-            <ul class="submenu">
-                <li ui-sref-active="active">
-                    <a ui-sref="quality_assurance_repair">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        保内维修
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-                <li ui-sref-active="active">
-                    <a ui-sref="entrust_repair">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        委托维修
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-            </ul>
-        </li>
-
-        <li ui-sref-active="active">
-            <a href="" class="dropdown-toggle">
-            &lt;!&ndash;<a href="" ui-sref="engineer_borrow_return">&ndash;&gt;
-                &lt;!&ndash;<i class="menu-icon fa fa-database"></i>&ndash;&gt;
-                <i class="menu-icon fa fa-cloud"></i>
-                <span class="menu-text"> 领用归还</span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-            <b class="arrow"></b>
-            <ul class="submenu">
-                <li ui-sref-active="active">
-                    <a ui-sref="borrow_spare_parts">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        备件领用
-                    </a>
-                    <b class="arrow"></b>
-                </li>
-
-                <li ui-sref-active="active">
-                    <a ui-sref="return_spare_parts">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        备件归还
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-            </ul>
-
-            &lt;!&ndash;<a ui-sref="engineer_borrow_return">&ndash;&gt;
-                &lt;!&ndash;<i class="menu-icon fa fa-cloud"></i>&ndash;&gt;
-                &lt;!&ndash;<span class="menu-text"> 领用归还 </span>&ndash;&gt;
-
-            &lt;!&ndash;</a>&ndash;&gt;
-
-            &lt;!&ndash;<b class="arrow"></b>&ndash;&gt;
-
-        </li>
-
-
-        <li ui-sref-active="active">
-            <a ui-sref="spare_parts_allocate">
-                <i class="menu-icon fa fa-exchange"></i>
-                <span class="menu-text"> 调拨管理 </span>
-            </a>
-
-            <b class="arrow"></b>
-        </li>
-
-        <li class="">
-            <a href="" class="dropdown-toggle">
-                <i class="menu-icon fa fa-database"></i>
-                <span class="menu-text"> 盘点管理 </span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-
-            <b class="arrow"></b>
-            <ul class="submenu">
-                <li class="">
-                    <a ui-sref="check">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        盘盈报表
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-                <li class="">
-                    <a ui-sref="check_entry">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        盘盈入库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-                <li class="">
-                    <a ui-sref="check_out">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        盘亏出库
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-            </ul>
-        </li>
-
-        <li class="">
-            <a href="" class="dropdown-toggle">
-                <i class="menu-icon fa fa-cube"></i>
-                <span class="menu-text"> 基础数据 </span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-
-            <b class="arrow"></b>
-
-            <ul class="submenu">
-                <li>
-                    <a ui-sref="barcode_manage">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        条码管理
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="mobile-menu-2.html">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        备件编码
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="mobile-menu-2.html">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        部门管理
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="mobile-menu-2.html">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        员工管理
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-            </ul>
-        </li>
-
-
-        </ul>-->
-        <!-- /.nav-list -->
-        <!--*/-->
-
-        <!--/* #section:basics/sidebar.layout.minimize */-->
         <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
             <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left"
                data-icon2="ace-icon fa fa-angle-double-right"></i>
@@ -626,14 +290,7 @@
         <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
     </a>
 </div>
-<!--/* /.main-container */-->
 
-<!--/* basic scripts */-->
-
-
-<!-- <![endif]-->
-
-<!--[if IE]>
 <script type="text/javascript">
     window.jQuery || document.write("<script src='js/jquery1x.min.js'>" + "<" + "/script>");
 </script>
@@ -656,44 +313,13 @@
         src="js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
 
 <script th:src="@{js/jqGrid/i18n/grid.locale-en.js}" src="js/jqGrid/i18n/grid.locale-en.js"></script>
-
-<!--/* page specific plugin scripts */-->
-
 <script th:src="@{js/ace-elements.min.js}" src="js/ace-elements.min.js"></script>
-<!--/* ace scripts --*/>
-<!--/*<script src="/js/ace.min.js"></script>*/-->
 <script th:src="@{js/uncompressed/ace.js}" src="js/uncompressed/ace.js"></script>
-
-<!--/* inline scripts related to this page */-->
-<!--/*<link rel="stylesheet" href="/css/ace.onpage-help.css" />*/-->
-<!--/*<link rel="stylesheet" href="/docs/js/themes/sunburst.css" />*/-->
-
-<!--/*script type="text/javascript"> ace.vars['base'] = '..'; </script*/-->
-<!--/*<script src="/js/ace/ace.onpage-help.js"></script>*/-->
-<!--/*<script src="/docs/js/rainbow.js"></script>*/-->
-<!--/*<script src="/docs/js/language/generic.js"></script>*/-->
-<!--/*<script src="/docs/js/language/html.js"></script>*/-->
-<!--/*<script src="/docs/js/language/css.js"></script>*/-->
-<!--/*<script src="/docs/js/language/javascript.js"></script>*/-->
-
-
-<!--/*<script src="/js/angular/angular-route.min.js"></script>*/-->
-
-
 <script th:src="@{js/jqGrid/jquery.jqGrid.min.js}" src="js/jqGrid/jquery.jqGrid.min.js"></script>
 <script th:src="@{js/jqGrid/i18n/grid.locale-cn.js}" src="js/jqGrid/i18n/grid.locale-cn.js"></script>
 <script th:src="@{js/jquery.form.js}" src="js/jquery.form.js"></script>
 <script th:src="@{js/notification.js}" src="js/notification.js"></script>
-
-<!--<script src="../../js/jquery.form.js"></script>-->
-
-<!--/*<script src="/js/date-time/locales/bootstrap-datepicker.zh-CN.js"/>*/-->
 <script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/1-6-10/esl.js"></script>
-<!--/*<script src="/js/webix/webix.js"></script>*/-->
-<!--/*<script src="/app/app.js"></script>*/-->
-<!--/*<script src="/js/router/router.js"></script>*/-->
-<!--/*<script src="testdata.js"></script>*/-->
-
 
 <input type="hidden" id="defaultMainPage" th:value="${defaultMainPage}"/>
 <script type="text/javascript">
@@ -760,6 +386,17 @@
     }
     function closeLoading() {
         $("#loadingModal").modal("hide");
+    }
+    function showChatModel(toUserId) {
+        alert(toUserId);
+        $("#toUserId").val(toUserId);
+        $("#toUserName").html($("#hToUserName").val());
+        $("#chatModal").modal({
+            "backdrop": 'static',
+            "keyboard": true,
+            "show": true
+        });
+
     }
 </script>
 
@@ -850,5 +487,31 @@
     //    }
 
 </script>
+<div id="chatModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog" style="width:600px">
+        <div class="modal-content">
+            <div class="modal-header no-padding">
+                <div class="table-header" style="cursor: move;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            id="closeBtn" >
+                        <span>&times;</span>
+                    </button>
+                    <input type="hidden" id="toUserId">
+                    <input type="hidden" id="fromUsernameId" th:value="${session.currUser.id}">
+                    <input type="hidden" id="fromUsernameLogo" th:value="${session.currUser.logoname}">
+                    <input type="hidden" id="fromRealname" th:value="${session.currUser.realname}">
+                    <span id="toUserName"></span>
+                </div>
+            </div>
+            <div class="message" id="message">
+            </div>
+            <div class="inputMsg">
+                <textarea id="text" type="text"></textarea>
+                <button>发送</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -3,11 +3,14 @@ package com.bxgcloud.controller;
 
 import com.bxgcloud.model.Menu;
 import com.bxgcloud.model.UserInfo;
+import com.bxgcloud.repository.UserinfoRepository;
 import com.bxgcloud.service.MenuService;
 import com.bxgcloud.service.UserinfoService;
 import com.bxgcloud.util.StringUtil;
+import com.bxgcloud.util.userUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +28,8 @@ public class MainController {
     private UserinfoService userinfoService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private UserinfoRepository userinfoRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index() {
@@ -52,12 +57,15 @@ public class MainController {
     }
 
     @RequestMapping("main.html")
-    public String main(HttpServletRequest request) throws ParseException {
+    public String main(HttpServletRequest request, Model model) throws ParseException {
         List<Menu> menus = menuService.findAllMenu();
         if (null != menus.get(0).getUrl() && !"".equals(menus.get(0).getUrl())) {
             request.setAttribute("defaultMainPage", menus.get(0).getUrl());
         }
         request.setAttribute("menus", menus);
+        UserInfo userInfo = userUtil.getCurrentUser(request);
+        List<UserInfo> userInfos = userinfoRepository.findByIdNot(userInfo.getId());
+        model.addAttribute("userInfos",userInfos);
         return "fault_operator_index";
     }
     @RequestMapping("/logout")
