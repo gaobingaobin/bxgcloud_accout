@@ -122,17 +122,17 @@
                         </li>
                         <li>
                             <a href="#" th:each="user,userStat:${userInfos}" th:id="${user.id}" onclick="showChatModel(this.id)">
-                                <img th:src="${user.logoname}" class="msg-photo" alt="Alex's Avatar">
+                                <img th:src="${user.logoname}" class="msg-photo" alt="Alex's Avatar" th:id="${'logoname'+user.id}">
 										<span class="msg-body">
 											<span class="msg-title">
 												<span class="blue" th:text="${user.realname}">Alex:</span>
-                                                <input type="hidden" id="hToUserName" th:value="${user.realname}">
+                                                <input type="hidden" th:id="${'hToUserName'+user.id}" th:value="${user.realname}">
 												不知道写啥 ...
 											</span>
 
 											<span class="msg-time">
 												<i class="icon-time"></i>
-												<span>1分钟以前</span>
+												<span th:id="${'status'+user.id}">不在线</span>
 											</span>
 										</span>
                             </a>
@@ -179,12 +179,14 @@
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="" class="dropdown-toggle">
                         <img class="nav-user-photo" src="avatars/avatar4.png" alt="张三照片"/>
-								<span class="user-info" th:text="${session.currUser.realname}">
+								<span class="user-info" id="currentRealname" th:text="${session.currUser.realname}">
 									张三
 								</span>
                         <i class="ace-icon fa fa-caret-down"></i>
                     </a>
                     <input type="hidden" id="currentUserName" th:value="${session.currUser.username}"/>
+                    <input type="hidden" id="currentUserlogo" th:value="${session.currUser.logoname}"/>
+                    <input type="hidden" id="currentUserId" th:value="${session.currUser.id}"/>
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li class="divider"></li>
 
@@ -332,7 +334,6 @@
         }
         window.location.reload();
     }
-
     $("#menuUL a").click(function () {
         globalStr = "";
     })
@@ -388,9 +389,8 @@
         $("#loadingModal").modal("hide");
     }
     function showChatModel(toUserId) {
-        alert(toUserId);
         $("#toUserId").val(toUserId);
-        $("#toUserName").html($("#hToUserName").val());
+        $("#toUserName").html($("#hToUserName"+toUserId).val());
         $("#chatModal").modal({
             "backdrop": 'static',
             "keyboard": true,
@@ -486,8 +486,92 @@
     //        });
     //    }
 
+    var fromUsernameId = $("#currentUserId").val()
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        websocket = new WebSocket("ws://"+location.host+"/websocket?"+fromUsernameId);
+    }
+    else {
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function (event) {
+        setMessageInnerHTML("连接成功，欢迎加入聊天平台！");
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+        console.log(event.data);
+        var data =event.data;
+        var myArray  = data.split(";");
+        if(data.indexOf("open")!=-1){
+            var lenght = myArray.length;
+            for(var i = 1; i<lenght; i++){
+                $("#status"+myArray[i]).html("在线")
+            }
+        }else if(data.indexOf("close")!=-1){
+            $("#status"+myArray[1]).html("不在线")
+        } else{
+            setMessageInnerHTML(myArray[2]);
+        }
+
+
+
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        setMessageInnerHTML("close");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        websocket.close();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+
+    //关闭连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send() {
+        var content = document.getElementById('text').value;
+        var imgSrc = $("#currentUserlogo").val();
+        var user = $("#currentRealname").val();
+        var toUserId = $("#toUserId").val();
+        var fromId = $("#currentUserId").val();
+        var contentTxt ='<div class="layim-chat-user" ><img  src='+imgSrc+'><cite>'+user+'</cite></div>'+'<div class="layim-chat-text">'+content+'</div>'
+        var message = fromId+";"+toUserId+";"+contentTxt;
+        websocket.send(message);
+        console.log(message);
+        $("#text").val('');
+        /*  document.getElementById('message').innerHTML += meassgeTxt + '<br/>';*/
+
+    }
+    $(document).keyup(function(event){
+        switch(event.keyCode) {
+            case 13:
+                send();
+        }
+    });
+
 </script>
 <div id="chatModal" class="modal fade" tabindex="-1">
+  <!--  <ul id="userLsit">
+
+    </ul>-->
     <div class="modal-dialog" style="width:600px">
         <div class="modal-content">
             <div class="modal-header no-padding">

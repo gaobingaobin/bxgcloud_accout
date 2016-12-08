@@ -21,14 +21,14 @@ public class MessageChatService {
     @Autowired
     private MessageChatRepository messageChatRepository;
 
-    public void saveMessage(String from, String to, WebSocketMessage<?> message, Long redytype){
+    public void saveMessage(String from, String to, String message, Long redytype){
         MessageChat messageChat = new MessageChat();
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         UserInfo fromUser = userinfoRepository.findOne(Integer.parseInt(from));
         UserInfo toUser =  userinfoRepository.findOne(Integer.parseInt(to));
         messageChat.setFromUser(fromUser);
         messageChat.setToUser(toUser);
-        messageChat.setMessage(message.toString());
+        messageChat.setMessage(message);
         messageChat.setToDate(date);
         messageChat.setReadtype(redytype);
         messageChatRepository.save(messageChat);

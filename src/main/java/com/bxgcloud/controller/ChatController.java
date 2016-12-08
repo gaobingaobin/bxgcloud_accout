@@ -32,46 +32,53 @@ public class ChatController implements WebSocketHandler {
     }
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
-        String urlquery = webSocketSession.getUri().getQuery();
-        String[] users = urlquery.split("&");
+        String fromId = webSocketSession.getUri().getQuery();
+   /*     String[] users = urlquery.split("&");
         String from = users[0];
-        String to = users[1];
+        String to = users[1];*/
         addOnlineCount();
-        sessionMap.put(from,webSocketSession);
-        WebSocketSession sessionto = sessionMap.get(to);
+        sessionMap.put(fromId,webSocketSession);
+        String keys ="";
+        for(String key:sessionMap.keySet()){
+            keys +=";"+key;
+        }
+        for(String key:sessionMap.keySet()){
+            WebSocketSession sessionto = sessionMap.get(key);
+            sessionto.sendMessage(new TextMessage("open"+keys));
+        }
+      /*  WebSocketSession sessionto = sessionMap.get(to);
         if(sessionto!=null){
             webSocketSession.sendMessage(new TextMessage("该用户在线"));//接受人的状态  上线
         }else{
             webSocketSession.sendMessage(new TextMessage("该用户下线"));
-        }
+        }*/
         System.out.println("有一连接进入！当前在线人数为" + getOnlineCount());
     }
 
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
         try {
-            String urlquery = webSocketSession.getUri().getQuery();
-            String[] users = urlquery.split("&");
-            String from = users[0];
-            String to = users[1];
+            String messageTxt = (String) webSocketMessage.getPayload();
+            String[] messages = messageTxt.split(";");
+            String fromUserId = messages[0];
+            String toUserId = messages[1];
+            String message = messages[2];
             Long readtype = 0L;
-            WebSocketSession sessionto = sessionMap.get(to);
-            WebSocketSession sessionfrom = sessionMap.get(from);
+            WebSocketSession sessionto = sessionMap.get(toUserId);
             if(sessionto!=null){
                 readtype = 1L;
                 sessionto.sendMessage(webSocketMessage);
-                sessionfrom.sendMessage(webSocketMessage);
+                webSocketSession.sendMessage(webSocketMessage);
                 System.out.print(webSocketMessage.getPayload());
             }else {
                 webSocketSession.sendMessage(new TextMessage("该用户不在线"));
             }
-           messageChatService.saveMessage(from,to,webSocketMessage,readtype);
+           messageChatService.saveMessage(fromUserId,toUserId,message,readtype);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
         // 添加处理错误的操作
@@ -83,10 +90,16 @@ public class ChatController implements WebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-        String urlquery = webSocketSession.getUri().getQuery();
-        String[] users = urlquery.split("&");
-        String from = users[0];
-        sessionMap.remove(from);
+        String fromId = webSocketSession.getUri().getQuery();
+        sessionMap.remove(fromId);
+        String keys ="";
+        for(String key:sessionMap.keySet()){
+            keys +=";"+key;
+        }
+        for(String key:sessionMap.keySet()){
+            WebSocketSession sessionto = sessionMap.get(key);
+            sessionto.sendMessage(new TextMessage("close"+";"+fromId));
+        }
         subOnlineCount();           //在线数减1
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
     }

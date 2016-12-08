@@ -11,8 +11,6 @@ public class BxgcloudAccoutApplication implements EmbeddedServletContainerCustom
 	public static void main(String[] args) {
 		SpringApplication.run(BxgcloudAccoutApplication.class, args);
 	}
-
-
 	@Override
 	public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer) {
 		configurableEmbeddedServletContainer.setPort(8090);
