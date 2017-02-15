@@ -68,7 +68,7 @@ public class ChatController implements WebSocketHandler {
             if(sessionto!=null){
                 readtype = 1L;
                 sessionto.sendMessage(webSocketMessage);
-                webSocketSession.sendMessage(webSocketMessage);
+            /*    webSocketSession.sendMessage(webSocketMessage);*/
                 System.out.print(webSocketMessage.getPayload());
             }else {
                 webSocketSession.sendMessage(new TextMessage("该用户不在线"));

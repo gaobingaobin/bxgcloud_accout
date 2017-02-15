@@ -517,8 +517,11 @@
             }
         }else if(data.indexOf("close")!=-1){
             $("#status"+myArray[1]).html("不在线")
-        } else{
+        } else if(event.data=='该用户不在线'){
+            setMessageInnerHTML('该用户不在线');
+        }else{
             setMessageInnerHTML(myArray[2]);
+            showChatModel(myArray[1])
         }
 
 
@@ -557,7 +560,7 @@
         websocket.send(message);
         console.log(message);
         $("#text").val('');
-        /*  document.getElementById('message').innerHTML += meassgeTxt + '<br/>';*/
+        document.getElementById('message').innerHTML += contentTxt + '<br/>';
 
     }
     $(document).keyup(function(event){
